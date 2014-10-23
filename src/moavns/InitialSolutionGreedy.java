@@ -51,14 +51,14 @@ public class InitialSolutionGreedy {
             qtdeLinhas = linhas;
             int colunas = Integer.parseInt(primeiralinha[2]);
             qtdeColunas = colunas;
-            int cont = 1;
+            Integer cont = 1;
             while(cont<=colunas){
                 String[] valores = reader.readLine().split(" ");
                 for(int i = 1; i < valores.length; i++){
                     cont++;
                 }
             }
-            int cont2 = 1;
+            Integer cont2 = 1;
             while(cont2<=linhas){
                 ArrayList<Integer> colunasquecobrem = new ArrayList();
                 int coberturalinha = Integer.parseInt(reader.readLine().split(" ")[1]);
@@ -89,8 +89,8 @@ public class InitialSolutionGreedy {
             int valorReal = maiorValor * (-1);
             int c = 0;
             
-            System.out.println("Linhas Restantes: "+linhasRestantes);
-            System.out.println("Coluna Escolhida: "+coluna_que_mais_cobre);
+            //System.out.println("Linhas Restantes: "+linhasRestantes);
+            //System.out.println("Coluna Escolhida: "+coluna_que_mais_cobre);
             
             while(!(colunasqueCobrem.isEmpty())){
                 //System.out.println(colunasqueCobrem.get(c));
@@ -117,15 +117,17 @@ public class InitialSolutionGreedy {
     public static void atualizarTreeMap(){
         Iterator iterador = lista_de_linhas.asMap().keySet().iterator();
         while(iterador.hasNext()){
-            int valorAtualizar = (Integer) iterador.next();
+            int valorAtualizar = (int) iterador.next();
+            int valorAtualizarReal = valorAtualizar*(-1);
             System.out.println("ValorAtualizar: "+valorAtualizar);
             Collection<Integer> inteiros = (Collection) lista_de_linhas.get(valorAtualizar);
             Iterator iterador2 = inteiros.iterator();
             while(iterador2.hasNext()){
-                int colunaAtualizar = (int) iterador2.next();
+                Integer colunaAtualizar = (Integer) iterador2.next();
                 int novoTamanho = linhasX.get(colunaAtualizar).size();
+                System.out.println("Novo Tamanho: "+novoTamanho);
                 System.out.println("Coluna a ser Atualizada: "+colunaAtualizar);
-                if(novoTamanho < valorAtualizar){
+                if(novoTamanho < valorAtualizarReal){
                     lista_de_linhas.remove(valorAtualizar, colunaAtualizar);
                     lista_de_linhas.put(novoTamanho, colunaAtualizar);
                 }
