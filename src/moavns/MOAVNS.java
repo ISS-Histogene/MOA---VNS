@@ -6,6 +6,9 @@
 package moavns;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  *
@@ -15,9 +18,13 @@ public class MOAVNS {
 
     /**
      * @param args the command line arguments
+     * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
-        InitialSolutionGreedy.greedySolution();
+        InitialSolutionGreedy.leituraArquivo();
+        InitialSolutionGreedy.InitialGreedySolution();
+        System.out.println(InitialSolutionGreedy.lista_de_colunas_gulosas);
+        
     }
     
 }
