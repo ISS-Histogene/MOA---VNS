@@ -115,13 +115,12 @@ public class InitialSolutionGreedy {
     }
     
     public static void atualizarTreeMap(){
-        Iterator iterador = lista_de_linhas.asMap().keySet().iterator();
+        Iterator iterador = lista_de_linhas.keySet().iterator();
         while(iterador.hasNext()){
             int valorAtualizar = (int) iterador.next();
             int valorAtualizarReal = valorAtualizar*(-1);
             System.out.println("ValorAtualizar: "+valorAtualizar);
-            Collection<Integer> inteiros = (Collection) lista_de_linhas.get(valorAtualizar);
-            Iterator iterador2 = inteiros.iterator();
+            Iterator iterador2 = lista_de_linhas.asMap().get(valorAtualizar).iterator();
             while(iterador2.hasNext()){
                 Integer colunaAtualizar = (Integer) iterador2.next();
                 int novoTamanho = linhasX.get(colunaAtualizar).size();
