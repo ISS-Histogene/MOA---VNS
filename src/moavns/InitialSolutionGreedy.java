@@ -80,20 +80,17 @@ public class InitialSolutionGreedy {
     
     
     public static void InitialGreedySolution(){
-
         while (linhasRestantes<qtdeLinhas){
-            int maiorValor = lista_de_linhas.keySet().iterator().next();
+            Iterator it = lista_de_linhas.keySet().iterator();
+            int maiorValor = (int) it.next();
             int coluna_que_mais_cobre = lista_de_linhas.asMap().get(maiorValor).iterator().next();
+            System.out.println("Maior Valor: "+maiorValor);
+            System.out.println("coluna: "+coluna_que_mais_cobre);
             ArrayList colunasqueCobrem = linhasX.get(coluna_que_mais_cobre);
             lista_de_colunas_gulosas.add(coluna_que_mais_cobre);
             int valorReal = maiorValor * (-1);
             int c = 0;
-            
-            //System.out.println("Linhas Restantes: "+linhasRestantes);
-            //System.out.println("Coluna Escolhida: "+coluna_que_mais_cobre);
-            
             while(!(colunasqueCobrem.isEmpty())){
-                //System.out.println(colunasqueCobrem.get(c));
                 linhasCobertas.add((Integer) colunasqueCobrem.get(c));
                 removerValorColunas((Integer) colunasqueCobrem.get(c));
                 
@@ -115,22 +112,31 @@ public class InitialSolutionGreedy {
     }
     
     public static void atualizarTreeMap(){
+        List<Integer> listaprovisoria = new ArrayList();
+        List<Integer> listaprovisoriaexcluir = new ArrayList();
         Iterator iterador = lista_de_linhas.keySet().iterator();
         while(iterador.hasNext()){
             int valorAtualizar = (int) iterador.next();
             int valorAtualizarReal = valorAtualizar*(-1);
-            System.out.println("ValorAtualizar: "+valorAtualizar);
             Iterator iterador2 = lista_de_linhas.asMap().get(valorAtualizar).iterator();
             while(iterador2.hasNext()){
                 Integer colunaAtualizar = (Integer) iterador2.next();
                 int novoTamanho = linhasX.get(colunaAtualizar).size();
-                System.out.println("Novo Tamanho: "+novoTamanho);
-                System.out.println("Coluna a ser Atualizada: "+colunaAtualizar);
                 if(novoTamanho < valorAtualizarReal){
-                    lista_de_linhas.remove(valorAtualizar, colunaAtualizar);
-                    lista_de_linhas.put(novoTamanho, colunaAtualizar);
+                    listaprovisoriaexcluir.add(valorAtualizar);
+                    listaprovisoriaexcluir.add(colunaAtualizar);
+                    
+                    listaprovisoria.add(novoTamanho);
+                    listaprovisoria.add(colunaAtualizar);
                 }
             }
+        }
+        for(int h = 0; h <= (listaprovisoriaexcluir.size()-2); h+=2){
+            lista_de_linhas.remove(listaprovisoriaexcluir.get(h), listaprovisoriaexcluir.get(h+1));
+        }
+        
+        for(int h = 0; h <= (listaprovisoria.size()-2); h+=2){
+            lista_de_linhas.put(listaprovisoria.get(h), listaprovisoria.get(h+1));
         }
         
     }
