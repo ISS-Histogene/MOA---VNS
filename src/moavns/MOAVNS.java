@@ -21,9 +21,16 @@ public class MOAVNS {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
+        
         InitialSolutionGreedy.leituraArquivo();
+        System.out.println("Nome Arquivo: "+InitialSolutionGreedy.nomearquivo);
         InitialSolutionGreedy.InitialGreedySolution();
         System.out.println(InitialSolutionGreedy.lista_de_colunas_gulosas);
+        long endTime = System.currentTimeMillis();
+        System.out.println("TEMPO DE PROCESSAMENTO TOTAL " + (endTime - InitialSolutionGreedy.startTime) + " ms");
+        System.out.println();
+        
+        
         
     }
     
