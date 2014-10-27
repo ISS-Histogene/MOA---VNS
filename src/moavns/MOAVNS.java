@@ -30,6 +30,11 @@ public class MOAVNS {
         System.out.println("Custo Total: "+InitialSolutionGreedy.custoTotal);
         System.out.println("TEMPO DE PROCESSAMENTO TOTAL " + (endTime - InitialSolutionGreedy.startTime) + " ms");
         System.out.println();
+        /*
+        for(int x = 0; x<=InitialSolutionGreedy.lista_de_colunas_gulosas.size()-1;x++){
+            System.out.println(InitialSolutionGreedy.linhasX.get(InitialSolutionGreedy.lista_de_colunas_gulosas.get(x)).getCobertura());
+        }
+        */
         
         
         

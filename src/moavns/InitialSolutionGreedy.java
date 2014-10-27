@@ -37,7 +37,7 @@ public class InitialSolutionGreedy {
     public static Multimap<Integer, Integer> lista_de_linhas = TreeMultimap.create();
     public static ArrayList lista_de_colunas_gulosas = new ArrayList();
     //public static ArrayList<Integer> linhasCobertas = new ArrayList();
-    public static Map<Integer, Integer> linhasCobertas = new HashMap();
+    public static ArrayList<Integer> linhasCobertas = new ArrayList();
     public static int qtdeLinhas = 0;
     public static int qtdeColunas = 0;
     public static int linhasRestantes = 0;
@@ -67,13 +67,12 @@ public class InitialSolutionGreedy {
                     Coluna colunanova = new Coluna(Integer.parseInt(valores[i]));
                     linhasX.put(cont, colunanova);
                     ColunasCusto.put(cont, Integer.parseInt(valores[i]));
-                    linhasCobertas.put(cont, 0);
+                    
                     cont++;
                 }
             }
             Integer cont2 = 1;
             while(cont2<=linhas){
-                
                 int coberturalinha = Integer.parseInt(reader.readLine().split(" ")[1]);
                 int cont3 = 1;
                 while(cont3 <= coberturalinha){
@@ -84,7 +83,7 @@ public class InitialSolutionGreedy {
                             colunaatual.setCoberturaValor(colunaatual.getCoberturaValor()+1);
                             ArrayList adicionar = colunaatual.getCobertura();
                             adicionar.add(cont2);
-                            linhasX.put(Integer.parseInt(cobertura[j]), colunaatual);
+                            //linhasX.put(Integer.parseInt(cobertura[j]), colunaatual);
                             cont3++;
                         }
                     }
@@ -116,7 +115,7 @@ public class InitialSolutionGreedy {
     
     
     public static void InitialGreedySolution(){
-        while (linhasRestantes<qtdeLinhas){
+        while (linhasCobertas.size()<qtdeLinhas){
 
             Iterator it = lista_de_linhas.keySet().iterator();
             Integer maiorValor = (Integer) it.next();
@@ -128,11 +127,13 @@ public class InitialSolutionGreedy {
             ArrayList colunasqueCobrem = linhasX.get(coluna_que_mais_cobre).getCobertura();
             lista_de_colunas_gulosas.add(coluna_que_mais_cobre);
             int valorReal = maiorValor * (-1);
-            int c = 0;
-            while(!(colunasqueCobrem.isEmpty())){
-                linhasCobertas.put((Integer) colunasqueCobrem.get(c), linhasCobertas.get((Integer) colunasqueCobrem.get(c)) +1);
-                removerValorColunas((Integer) colunasqueCobrem.get(c));
-                linhasRestantes++;
+         
+            for(int c = 0; c<=colunasqueCobrem.size()-1;c++){
+                if(!(linhasCobertas.contains((Integer) colunasqueCobrem.get(c)))){
+                    linhasCobertas.add((Integer) colunasqueCobrem.get(c));
+                    removerValorColunas((Integer) colunasqueCobrem.get(c));
+                }
+                
                 
             }
             atualizarTreeMap();
@@ -145,8 +146,12 @@ public class InitialSolutionGreedy {
         Iterator iterador = linhasX.keySet().iterator();
         while(iterador.hasNext()){
             Integer chave = (Integer) iterador.next();
-            ArrayList listacolunas = linhasX.get(chave).getCobertura();
-            listacolunas.remove(linhaRemover);
+            Coluna colunaatual = linhasX.get(chave);
+            ArrayList listacolunas = colunaatual.getCobertura();
+            if(listacolunas.contains(linhaRemover)){
+                colunaatual.setCoberturaValor(colunaatual.getCoberturaValor()-1);
+            }
+            //listacolunas.remove(linhaRemover);
             //linhasX.put(chave, listacolunas);
             
         }
@@ -162,7 +167,7 @@ public class InitialSolutionGreedy {
             Iterator iterador2 = lista_de_linhas.get(valorAtualizar).iterator();
             while(iterador2.hasNext()){
                 Integer colunaAtualizar = (Integer) iterador2.next();
-                int novoTamanho = linhasX.get(colunaAtualizar).getCobertura().size();
+                int novoTamanho = linhasX.get(colunaAtualizar).getCoberturaValor();
                 if(novoTamanho < valorAtualizarReal){
                     listaprovisoriaexcluir.add(valorAtualizar);
                     listaprovisoriaexcluir.add(colunaAtualizar);
