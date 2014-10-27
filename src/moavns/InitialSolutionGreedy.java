@@ -33,6 +33,7 @@ import javax.swing.JFileChooser;
 public class InitialSolutionGreedy {
     
     public static Map<Integer, ArrayList<Integer>> linhasX = new HashMap();
+    public static Map<Integer, Integer> ColunasCusto = new HashMap();
     public static Multimap<Integer, Integer> lista_de_linhas = TreeMultimap.create();
     public static ArrayList lista_de_colunas_gulosas = new ArrayList();
     public static ArrayList<Integer> linhasCobertas = new ArrayList();
@@ -41,6 +42,7 @@ public class InitialSolutionGreedy {
     public static int linhasRestantes = 0;
     public static String nomearquivo;
     public static long startTime;
+    public static int custoTotal = 0;
     
     public static void leituraArquivo() throws IOException{
         final JFileChooser fc = new JFileChooser();
@@ -62,6 +64,7 @@ public class InitialSolutionGreedy {
                 for(int i = 1; i < valores.length; i++){
                     ArrayList<Integer> inicio = new ArrayList<Integer>();
                     linhasX.put(cont, inicio);
+                    ColunasCusto.put(cont, Integer.parseInt(valores[i]));
                     cont++;
                 }
             }
@@ -93,14 +96,32 @@ public class InitialSolutionGreedy {
         
     }
     
+    public static int melhorEscolha(int maiorcobertura){
+        Iterator acharmelhor = lista_de_linhas.asMap().get(maiorcobertura).iterator();
+        int menorcusto = Integer.MAX_VALUE;
+        int melhorcoluna = 0;
+        while(acharmelhor.hasNext()){
+            int colunachecar = (Integer) acharmelhor.next();
+            int custochecar = ColunasCusto.get(colunachecar);
+            if (custochecar<menorcusto){
+                menorcusto = custochecar;
+                melhorcoluna = colunachecar;
+            }
+        }
+        return melhorcoluna;
+    }
+    
     
     public static void InitialGreedySolution(){
         while (linhasRestantes<qtdeLinhas){
-            //System.out.println("Linhas Restantes: "+linhasRestantes);
+
             Iterator it = lista_de_linhas.keySet().iterator();
             Integer maiorValor = (Integer) it.next();
+            
             Integer coluna_que_mais_cobre = (Integer) lista_de_linhas.asMap().get(maiorValor).iterator().next();
-
+            //Integer coluna_que_mais_cobre = melhorEscolha(maiorValor);
+            custoTotal += ColunasCusto.get(coluna_que_mais_cobre);
+            
             ArrayList colunasqueCobrem = linhasX.get(coluna_que_mais_cobre);
             lista_de_colunas_gulosas.add(coluna_que_mais_cobre);
             int valorReal = maiorValor * (-1);

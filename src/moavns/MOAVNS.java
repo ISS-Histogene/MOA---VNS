@@ -27,6 +27,7 @@ public class MOAVNS {
         InitialSolutionGreedy.InitialGreedySolution();
         System.out.println(InitialSolutionGreedy.lista_de_colunas_gulosas);
         long endTime = System.currentTimeMillis();
+        System.out.println("Custo Total: "+InitialSolutionGreedy.custoTotal);
         System.out.println("TEMPO DE PROCESSAMENTO TOTAL " + (endTime - InitialSolutionGreedy.startTime) + " ms");
         System.out.println();
         
