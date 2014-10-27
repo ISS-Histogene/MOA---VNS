@@ -32,11 +32,12 @@ import javax.swing.JFileChooser;
  */
 public class InitialSolutionGreedy {
     
-    public static Map<Integer, ArrayList<Integer>> linhasX = new HashMap();
+    public static Map<Integer, Coluna> linhasX = new HashMap();
     public static Map<Integer, Integer> ColunasCusto = new HashMap();
     public static Multimap<Integer, Integer> lista_de_linhas = TreeMultimap.create();
     public static ArrayList lista_de_colunas_gulosas = new ArrayList();
-    public static ArrayList<Integer> linhasCobertas = new ArrayList();
+    //public static ArrayList<Integer> linhasCobertas = new ArrayList();
+    public static Map<Integer, Integer> linhasCobertas = new HashMap();
     public static int qtdeLinhas = 0;
     public static int qtdeColunas = 0;
     public static int linhasRestantes = 0;
@@ -63,8 +64,10 @@ public class InitialSolutionGreedy {
                 String[] valores = reader.readLine().split(" ");
                 for(int i = 1; i < valores.length; i++){
                     ArrayList<Integer> inicio = new ArrayList<Integer>();
-                    linhasX.put(cont, inicio);
+                    Coluna colunanova = new Coluna(Integer.parseInt(valores[i]));
+                    linhasX.put(cont, colunanova);
                     ColunasCusto.put(cont, Integer.parseInt(valores[i]));
+                    linhasCobertas.put(cont, 0);
                     cont++;
                 }
             }
@@ -76,12 +79,12 @@ public class InitialSolutionGreedy {
                 while(cont3 <= coberturalinha){
                     String[] cobertura = reader.readLine().split(" ");
                     for(int j = 1; j<cobertura.length; j++){
-
                         if(linhasX.containsKey(Integer.parseInt(cobertura[j]))){
-
-                            ArrayList adicionar = linhasX.get(Integer.parseInt(cobertura[j]));
+                            Coluna colunaatual = linhasX.get(Integer.parseInt(cobertura[j]));
+                            colunaatual.setCoberturaValor(colunaatual.getCoberturaValor()+1);
+                            ArrayList adicionar = colunaatual.getCobertura();
                             adicionar.add(cont2);
-                            linhasX.put(Integer.parseInt(cobertura[j]), adicionar);
+                            linhasX.put(Integer.parseInt(cobertura[j]), colunaatual);
                             cont3++;
                         }
                     }
@@ -89,7 +92,7 @@ public class InitialSolutionGreedy {
                 cont2++;
             }
             for(Integer entry : linhasX.keySet()){
-                int tamanho = linhasX.get(entry).size() *(-1);
+                int tamanho = linhasX.get(entry).getCoberturaValor() *(-1);
                 lista_de_linhas.put(tamanho, entry);
             }
         }
@@ -122,12 +125,12 @@ public class InitialSolutionGreedy {
             //Integer coluna_que_mais_cobre = melhorEscolha(maiorValor);
             custoTotal += ColunasCusto.get(coluna_que_mais_cobre);
             
-            ArrayList colunasqueCobrem = linhasX.get(coluna_que_mais_cobre);
+            ArrayList colunasqueCobrem = linhasX.get(coluna_que_mais_cobre).getCobertura();
             lista_de_colunas_gulosas.add(coluna_que_mais_cobre);
             int valorReal = maiorValor * (-1);
             int c = 0;
             while(!(colunasqueCobrem.isEmpty())){
-                linhasCobertas.add((Integer) colunasqueCobrem.get(c));
+                linhasCobertas.put((Integer) colunasqueCobrem.get(c), linhasCobertas.get((Integer) colunasqueCobrem.get(c)) +1);
                 removerValorColunas((Integer) colunasqueCobrem.get(c));
                 linhasRestantes++;
                 
@@ -142,9 +145,9 @@ public class InitialSolutionGreedy {
         Iterator iterador = linhasX.keySet().iterator();
         while(iterador.hasNext()){
             Integer chave = (Integer) iterador.next();
-            ArrayList listacolunas = linhasX.get(chave);
+            ArrayList listacolunas = linhasX.get(chave).getCobertura();
             listacolunas.remove(linhaRemover);
-            linhasX.put(chave, listacolunas);
+            //linhasX.put(chave, listacolunas);
             
         }
     }
@@ -159,7 +162,7 @@ public class InitialSolutionGreedy {
             Iterator iterador2 = lista_de_linhas.get(valorAtualizar).iterator();
             while(iterador2.hasNext()){
                 Integer colunaAtualizar = (Integer) iterador2.next();
-                int novoTamanho = linhasX.get(colunaAtualizar).size();
+                int novoTamanho = linhasX.get(colunaAtualizar).getCobertura().size();
                 if(novoTamanho < valorAtualizarReal){
                     listaprovisoriaexcluir.add(valorAtualizar);
                     listaprovisoriaexcluir.add(colunaAtualizar);
@@ -184,6 +187,14 @@ public class InitialSolutionGreedy {
         }
         
     }
+    
+    public static void One_flip(){
+        for(int a = 0; a<=lista_de_colunas_gulosas.size()-1;a++){
+            
+        }
+    }
+    
+    
     
     
 }
