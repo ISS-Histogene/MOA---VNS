@@ -14,7 +14,16 @@ import java.util.ArrayList;
 public class Coluna {
     private int coberturaValor;
     private ArrayList cobertura;
-    private int custo;
+    private float custo;
+    private int nome;
+
+    public int getNome() {
+        return nome;
+    }
+
+    public void setNome(int nome) {
+        this.nome = nome;
+    }
 
     public int getCoberturaValor() {
         return coberturaValor;
@@ -32,17 +41,18 @@ public class Coluna {
         this.cobertura = cobertura;
     }
 
-    public Coluna(int custo) {
+    public Coluna(int nome) {
         this.coberturaValor = 0;
         this.cobertura = new ArrayList();
-        this.custo = custo;
+        this.custo = 0;
+        this.nome = nome;
     }
 
-    public int getCusto() {
+    public float getCusto() {
         return custo;
     }
 
-    public void setCusto(int custo) {
+    public void setCusto(float custo) {
         this.custo = custo;
     }
 

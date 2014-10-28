@@ -22,7 +22,7 @@ public class MOAVNS {
      */
     public static void main(String[] args) throws IOException {
         
-        InitialSolutionGreedy.leituraArquivo();
+        InitialSolutionGreedy.leituraArquivoCons();
         System.out.println("Nome Arquivo: "+InitialSolutionGreedy.nomearquivo);
         InitialSolutionGreedy.InitialGreedySolution();
         System.out.println(InitialSolutionGreedy.lista_de_colunas_gulosas);
@@ -34,7 +34,8 @@ public class MOAVNS {
         for(int x = 0; x<=InitialSolutionGreedy.lista_de_colunas_gulosas.size()-1;x++){
             System.out.println(InitialSolutionGreedy.linhasX.get(InitialSolutionGreedy.lista_de_colunas_gulosas.get(x)).getCobertura());
         }
-        */
+                */
+        
         
         
         

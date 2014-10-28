@@ -33,7 +33,7 @@ import javax.swing.JFileChooser;
 public class InitialSolutionGreedy {
     
     public static Map<Integer, Coluna> linhasX = new HashMap();
-    public static Map<Integer, Integer> ColunasCusto = new HashMap();
+    public static Map<Integer, Float> ColunasCusto = new HashMap();
     public static Multimap<Integer, Integer> lista_de_linhas = TreeMultimap.create();
     public static ArrayList lista_de_colunas_gulosas = new ArrayList();
     //public static ArrayList<Integer> linhasCobertas = new ArrayList();
@@ -44,7 +44,7 @@ public class InitialSolutionGreedy {
     public static String nomearquivo;
     public static long startTime;
     public static int custoTotal = 0;
-    
+    /*
     public static void leituraArquivo() throws IOException{
         final JFileChooser fc = new JFileChooser();
         int returnVal = fc.showOpenDialog(fc);
@@ -63,7 +63,6 @@ public class InitialSolutionGreedy {
             while(cont<=colunas){
                 String[] valores = reader.readLine().split(" ");
                 for(int i = 1; i < valores.length; i++){
-                    ArrayList<Integer> inicio = new ArrayList<Integer>();
                     Coluna colunanova = new Coluna(Integer.parseInt(valores[i]));
                     linhasX.put(cont, colunanova);
                     ColunasCusto.put(cont, Integer.parseInt(valores[i]));
@@ -97,14 +96,92 @@ public class InitialSolutionGreedy {
         }
         
     }
+    */
+    public static void leituraArquivoCons() throws IOException{
+        final JFileChooser fc = new JFileChooser();
+        int returnVal = fc.showOpenDialog(fc);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            nomearquivo = file.getName();
+            BufferedReader reader = new BufferedReader(new FileReader(file.getPath()));
+            startTime = System.currentTimeMillis();
+            String[] primeiralinha = reader.readLine().split(" ");
+            for(String elemento : primeiralinha){
+                if(!(elemento.equals(""))){
+                    try{
+                        qtdeLinhas = Integer.parseInt(elemento);
+                    }
+                    catch(Exception ex){
+                        continue;
+                    }
+                }
+            }
+            System.out.println(qtdeLinhas);
+            
+            String[] segundalinha = reader.readLine().split(" ");
+            for(String elemento : segundalinha){
+                if(!(elemento.equals(""))){
+                    try{
+                        qtdeColunas = Integer.parseInt(elemento);
+                    }
+                    catch(Exception ex){
+                        continue;
+                    }
+                }
+            }
+            System.out.println(qtdeColunas);
+            String pular = reader.readLine();
+            Integer cont = 1;
+            while(cont<=qtdeColunas){
+                String[] valores = reader.readLine().split(" ");
+                int controle = 0;
+
+                for(String valor : valores){
+                    if(!(valor.equals(""))){
+                            //System.out.println("Cont: "+controle);
+                            //System.out.println("valor: "+valor);
+                            if(controle==2){
+                                Coluna atualizar2 = linhasX.get(cont);
+                                ArrayList adicionar = atualizar2.getCobertura();
+                                atualizar2.setCoberturaValor(atualizar2.getCoberturaValor()+1);
+                                adicionar.add(Integer.parseInt(valor));
+                            }
+                            
+                            else if(controle==1){
+                                Coluna atualizar = linhasX.get(cont);
+                                atualizar.setCusto(Float.parseFloat(valor));
+                                ColunasCusto.put(cont, Float.parseFloat(valor));
+                                controle = 2;
+                            }
+                            else if(controle==0){
+                                Coluna colunanova = new Coluna(Integer.parseInt(valor));
+                                linhasX.put(cont, colunanova);
+                                controle = 1;
+                            }
+                        
+
+                    }
+                }
+                cont++;
+            }
+            for(Integer entry : linhasX.keySet()){
+                int tamanho = linhasX.get(entry).getCoberturaValor() *(-1);
+                //System.out.println(entry);
+                //System.out.println(linhasX.get(entry).getCobertura());
+                lista_de_linhas.put(tamanho, entry);
+            }
+        }
+        
+    }
     
     public static int melhorEscolha(int maiorcobertura){
         Iterator acharmelhor = lista_de_linhas.asMap().get(maiorcobertura).iterator();
-        int menorcusto = Integer.MAX_VALUE;
+        float menorcusto = Integer.MAX_VALUE;
         int melhorcoluna = 0;
         while(acharmelhor.hasNext()){
             int colunachecar = (Integer) acharmelhor.next();
-            int custochecar = ColunasCusto.get(colunachecar);
+            float custochecar = ColunasCusto.get(colunachecar);
             if (custochecar<menorcusto){
                 menorcusto = custochecar;
                 melhorcoluna = colunachecar;
