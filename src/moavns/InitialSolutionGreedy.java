@@ -35,7 +35,7 @@ public class InitialSolutionGreedy {
     public static Map<Integer, Coluna> linhasX = new HashMap();
     public static Map<Integer, Float> ColunasCusto = new HashMap();
     public static Multimap<Integer, Integer> lista_de_linhas = TreeMultimap.create();
-    public static ArrayList lista_de_colunas_gulosas = new ArrayList();
+    public static ArrayList<Coluna> lista_de_colunas_gulosas = new ArrayList();
     //public static ArrayList<Integer> linhasCobertas = new ArrayList();
     public static ArrayList<Integer> linhasCobertas = new ArrayList();
     public static int qtdeLinhas = 0;
@@ -202,7 +202,7 @@ public class InitialSolutionGreedy {
             custoTotal += ColunasCusto.get(coluna_que_mais_cobre);
             
             ArrayList colunasqueCobrem = linhasX.get(coluna_que_mais_cobre).getCobertura();
-            lista_de_colunas_gulosas.add(coluna_que_mais_cobre);
+            lista_de_colunas_gulosas.add(linhasX.get(coluna_que_mais_cobre));
             int valorReal = maiorValor * (-1);
          
             for(int c = 0; c<=colunasqueCobrem.size()-1;c++){
@@ -270,7 +270,27 @@ public class InitialSolutionGreedy {
         
     }
     
-    public static void One_flip(){
+    public static void removerLinhas(Coluna col){
+        ArrayList<Integer> cobertas_pela_coluna = col.getCobertura();
+        for(Integer linha : cobertas_pela_coluna){
+            if(linhasCobertas.contains(linha)){
+                linhasCobertas.remove(linha);
+            }
+        }
+    }
+    
+    public static void cobrirLinhas(ArrayList<Coluna> colunas){
+        for(Coluna col : colunas){
+            ArrayList<Integer> valores_cobertos_pela_coluna = col.getCobertura();
+            for(Integer linha : valores_cobertos_pela_coluna){
+                if(!(linhasCobertas.contains(linha))){
+                    linhasCobertas.add(linha);
+                }
+            }
+        }
+    }
+    
+    public static void One_flip_first(){
         for(int a = 0; a<=lista_de_colunas_gulosas.size()-1;a++){
             
         }
