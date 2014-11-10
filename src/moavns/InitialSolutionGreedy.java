@@ -32,18 +32,18 @@ import javax.swing.JFileChooser;
  */
 public class InitialSolutionGreedy {
     
-    public static Map<Integer, Coluna> linhasX = new HashMap();
-    public static Map<Integer, Float> ColunasCusto = new HashMap();
-    public static Multimap<Integer, Integer> lista_de_linhas = TreeMultimap.create();
-    public static ArrayList<Coluna> lista_de_colunas_gulosas = new ArrayList();
+    private  Map<Integer, Coluna> linhasX = new HashMap();
+    private  Map<Integer, Float> ColunasCusto = new HashMap();
+    private  Multimap<Integer, Integer> lista_de_linhas = TreeMultimap.create();
+    private  ArrayList<Coluna> lista_de_colunas_gulosas = new ArrayList();
     //public static ArrayList<Integer> linhasCobertas = new ArrayList();
-    public static ArrayList<Integer> linhasCobertas = new ArrayList();
-    public static int qtdeLinhas = 0;
-    public static int qtdeColunas = 0;
-    public static int linhasRestantes = 0;
-    public static String nomearquivo;
-    public static long startTime;
-    public static int custoTotal = 0;
+    private  ArrayList<Integer> linhasCobertas = new ArrayList();
+    private  int qtdeLinhas = 0;
+    private  int qtdeColunas = 0;
+    private  int linhasRestantes = 0;
+    private  String nomearquivo;
+    private  long startTime;
+    private  float custoTotal = 0;
     /*
     public static void leituraArquivo() throws IOException{
         final JFileChooser fc = new JFileChooser();
@@ -97,7 +97,7 @@ public class InitialSolutionGreedy {
         
     }
     */
-    public static void leituraArquivoCons() throws IOException{
+    public  void leituraArquivoCons() throws IOException{
         final JFileChooser fc = new JFileChooser();
         int returnVal = fc.showOpenDialog(fc);
 
@@ -175,9 +175,9 @@ public class InitialSolutionGreedy {
         
     }
     
-    public static int melhorEscolha(int maiorcobertura){
+    public  int melhorEscolha(int maiorcobertura){
         Iterator acharmelhor = lista_de_linhas.asMap().get(maiorcobertura).iterator();
-        float menorcusto = Integer.MAX_VALUE;
+        float menorcusto = Float.MAX_VALUE;
         int melhorcoluna = 0;
         while(acharmelhor.hasNext()){
             int colunachecar = (Integer) acharmelhor.next();
@@ -191,7 +191,7 @@ public class InitialSolutionGreedy {
     }
     
     
-    public static void InitialGreedySolution(){
+    public  Solucao InitialGreedySolution(){
         while (linhasCobertas.size()<qtdeLinhas){
 
             Iterator it = lista_de_linhas.keySet().iterator();
@@ -215,11 +215,12 @@ public class InitialSolutionGreedy {
             }
             atualizarTreeMap();
         }
+        return new Solucao(this.lista_de_colunas_gulosas, this.custoTotal, this.linhasX, this.linhasCobertas, this.qtdeLinhas, this.qtdeColunas);
     }
 
     
     
-    public static void removerValorColunas(Integer linhaRemover){
+    public  void removerValorColunas(Integer linhaRemover){
         Iterator iterador = linhasX.keySet().iterator();
         while(iterador.hasNext()){
             Integer chave = (Integer) iterador.next();
@@ -234,7 +235,7 @@ public class InitialSolutionGreedy {
         }
     }
     
-    public static void atualizarTreeMap(){
+    public  void atualizarTreeMap(){
         List<Integer> listaprovisoria = new ArrayList();
         List<Integer> listaprovisoriaexcluir = new ArrayList();
         Iterator iterador = lista_de_linhas.keySet().iterator();
@@ -269,32 +270,54 @@ public class InitialSolutionGreedy {
         }
         
     }
-    
-    public static void removerLinhas(Coluna col){
-        ArrayList<Integer> cobertas_pela_coluna = col.getCobertura();
-        for(Integer linha : cobertas_pela_coluna){
-            if(linhasCobertas.contains(linha)){
-                linhasCobertas.remove(linha);
-            }
-        }
+
+    public Map<Integer, Coluna> getLinhasX() {
+        return linhasX;
+    }
+
+    public Map<Integer, Float> getColunasCusto() {
+        return ColunasCusto;
+    }
+
+    public Multimap<Integer, Integer> getLista_de_linhas() {
+        return lista_de_linhas;
+    }
+
+    public ArrayList<Coluna> getLista_de_colunas_gulosas() {
+        return lista_de_colunas_gulosas;
+    }
+
+    public ArrayList<Integer> getLinhasCobertas() {
+        return linhasCobertas;
+    }
+
+    public int getQtdeLinhas() {
+        return qtdeLinhas;
+    }
+
+    public int getQtdeColunas() {
+        return qtdeColunas;
+    }
+
+    public int getLinhasRestantes() {
+        return linhasRestantes;
+    }
+
+    public String getNomearquivo() {
+        return nomearquivo;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public float getCustoTotal() {
+        return custoTotal;
     }
     
-    public static void cobrirLinhas(ArrayList<Coluna> colunas){
-        for(Coluna col : colunas){
-            ArrayList<Integer> valores_cobertos_pela_coluna = col.getCobertura();
-            for(Integer linha : valores_cobertos_pela_coluna){
-                if(!(linhasCobertas.contains(linha))){
-                    linhasCobertas.add(linha);
-                }
-            }
-        }
-    }
     
-    public static void One_flip_first(){
-        for(int a = 0; a<=lista_de_colunas_gulosas.size()-1;a++){
-            
-        }
-    }
+    
+   
     
     
     

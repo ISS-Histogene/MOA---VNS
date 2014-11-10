@@ -17,6 +17,10 @@ public class Coluna {
     private float custo;
     private int nome;
 
+    public Coluna() {
+        
+    }
+
     public int getNome() {
         return nome;
     }

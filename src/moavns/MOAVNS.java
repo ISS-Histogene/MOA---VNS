@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  *
@@ -21,20 +22,43 @@ public class MOAVNS {
      * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
-        
-        InitialSolutionGreedy.leituraArquivoCons();
-        System.out.println("Nome Arquivo: "+InitialSolutionGreedy.nomearquivo);
-        InitialSolutionGreedy.InitialGreedySolution();
-        System.out.println(InitialSolutionGreedy.lista_de_colunas_gulosas);
-        long endTime = System.currentTimeMillis();
-        System.out.println("Custo Total: "+InitialSolutionGreedy.custoTotal);
-        System.out.println("TEMPO DE PROCESSAMENTO TOTAL " + (endTime - InitialSolutionGreedy.startTime) + " ms");
-        System.out.println();
-        /*
-        for(int x = 0; x<=InitialSolutionGreedy.lista_de_colunas_gulosas.size()-1;x++){
-            System.out.println(InitialSolutionGreedy.linhasX.get(InitialSolutionGreedy.lista_de_colunas_gulosas.get(x)).getCobertura());
+        InitialSolutionGreedy solucaoinicial = new InitialSolutionGreedy();
+        solucaoinicial.leituraArquivoCons();
+        System.out.println("Nome Arquivo: "+solucaoinicial.getNomearquivo());
+        Solucao inicial = solucaoinicial.InitialGreedySolution();
+        for(Coluna col : solucaoinicial.getLista_de_colunas_gulosas()){
+            System.out.printf(col.getNome() + " ");
         }
-                */
+        System.out.println();
+        System.out.println("Custo Total : "+solucaoinicial.getCustoTotal());
+        long endTime = System.currentTimeMillis();
+        System.out.println("TEMPO DE PROCESSAMENTO INICIAL " + (endTime - solucaoinicial.getStartTime()) + " ms");
+        System.out.println();
+        long startTimex = System.currentTimeMillis();
+        OneFlip oneflip = new OneFlip(inicial);
+        Solucao solucao2 = oneflip.One_flip_first(inicial, 0);
+        for(Coluna col : solucao2.getColunas()){
+            System.out.printf(col.getNome() + " ");
+        }
+        long endTime2 = System.currentTimeMillis();
+        System.out.println();
+        System.out.println("Custo Total OneFlip: "+solucao2.getCustototal());
+        System.out.println("TEMPO DE PROCESSAMENTO ONEFLIP " + (endTime2 - startTimex) + " ms");
+        System.out.println();
+        long startTimex2 = System.currentTimeMillis();
+        OneFlip oneflipx = new OneFlip(inicial);
+        Solucao solucao2x = oneflipx.One_flip_first(inicial, 1);
+        for(Coluna col : solucao2x.getColunas()){
+            System.out.printf(col.getNome() + " ");
+        }
+        long endTime2x = System.currentTimeMillis();
+        System.out.println();
+        System.out.println("Custo Total OneFlip 10000 solucoes: "+solucao2x.getCustototal());
+        System.out.println("TEMPO DE PROCESSAMENTO ONEFLIP " + (endTime2x - startTimex2) + " ms");
+        System.out.println();
+        System.out.println("TEMPO DE PROCESSAMENTO TOTAL " + ((endTime - solucaoinicial.getStartTime())+(endTime2 - startTimex)+(endTime2x - startTimex2)) + " ms");
+        
+       
         
         
         
