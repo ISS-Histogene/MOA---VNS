@@ -31,32 +31,58 @@ public class MOAVNS {
         }
         System.out.println();
         System.out.println("Custo Total : "+solucaoinicial.getCustoTotal());
+        System.out.println("\n");
+        System.out.printf("Sem redundancia: ");
+        EstruturasVizinhanca semredun = new EstruturasVizinhanca(inicial);
+        Solucao solucaosem = semredun.eliminarRedundancia(inicial);
+        for(Coluna col : solucaosem.getColunas()){
+            System.out.printf(col.getNome() + " ");
+        }
+        System.out.println();
+        
         long endTime = System.currentTimeMillis();
         System.out.println("TEMPO DE PROCESSAMENTO INICIAL " + (endTime - solucaoinicial.getStartTime()) + " ms");
         System.out.println();
         long startTimex = System.currentTimeMillis();
-        OneFlip oneflip = new OneFlip(inicial);
-        Solucao solucao2 = oneflip.One_flip_first(inicial, 0);
+        EstruturasVizinhanca oneflip = new EstruturasVizinhanca(inicial);
+        Solucao solucao2 = oneflip.One_flip_best(inicial, 0);
         for(Coluna col : solucao2.getColunas()){
             System.out.printf(col.getNome() + " ");
         }
+        
+        System.out.println();
+        
+        System.out.printf("Sem redundancia: ");
+        Solucao solucaosem1 = oneflip.eliminarRedundancia(solucao2);
+        for(Coluna col : solucaosem1.getColunas()){
+            System.out.printf(col.getNome() + " ");
+        }
+        System.out.println();
         long endTime2 = System.currentTimeMillis();
         System.out.println();
         System.out.println("Custo Total OneFlip: "+solucao2.getCustototal());
+        System.out.println("Custo Total OneFlip Sem Redundancia: "+solucaosem1.getCustototal());
         System.out.println("TEMPO DE PROCESSAMENTO ONEFLIP " + (endTime2 - startTimex) + " ms");
         System.out.println();
+        
         long startTimex2 = System.currentTimeMillis();
-        OneFlip oneflipx = new OneFlip(inicial);
-        Solucao solucao2x = oneflipx.eliminarRedundancia(inicial);
-        for(Coluna col : solucao2x.getColunas()){
+        EstruturasVizinhanca twoflip = new EstruturasVizinhanca(inicial);
+        Solucao solucao3 = twoflip.Two_flip_best(inicial);
+        for(Coluna col : solucao3.getColunas()){
             System.out.printf(col.getNome() + " ");
         }
-        long endTime2x = System.currentTimeMillis();
         System.out.println();
-        System.out.println("Custo Total OneFlip Sem Redundancia: "+solucao2x.getCustototal());
-        System.out.println("TEMPO DE PROCESSAMENTO ONEFLIP " + (endTime2x - startTimex2) + " ms");
+        Solucao solucaosem2 = twoflip.eliminarRedundancia(solucao3);
+        System.out.printf("Sem redundancia: ");
+        for(Coluna col : solucaosem2.getColunas()){
+            System.out.printf(col.getNome() + " ");
+        }
+        long endTime3 = System.currentTimeMillis();
         System.out.println();
-        System.out.println("TEMPO DE PROCESSAMENTO TOTAL " + ((endTime - solucaoinicial.getStartTime())+(endTime2 - startTimex)+(endTime2x - startTimex2)) + " ms");
+        System.out.println("Custo Total TwoFlip: "+solucao3.getCustototal());
+        System.out.println("Custo Total Sem Redundancia: "+solucaosem2.getCustototal());
+        System.out.println("TEMPO DE PROCESSAMENTO TwoFLIP " + (endTime3 - startTimex2) + " ms");
+        System.out.println();
         
        
         
