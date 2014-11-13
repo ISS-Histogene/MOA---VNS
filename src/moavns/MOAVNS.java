@@ -47,13 +47,13 @@ public class MOAVNS {
         System.out.println();
         long startTimex2 = System.currentTimeMillis();
         OneFlip oneflipx = new OneFlip(inicial);
-        Solucao solucao2x = oneflipx.One_flip_first(inicial, 1);
+        Solucao solucao2x = oneflipx.eliminarRedundancia(inicial);
         for(Coluna col : solucao2x.getColunas()){
             System.out.printf(col.getNome() + " ");
         }
         long endTime2x = System.currentTimeMillis();
         System.out.println();
-        System.out.println("Custo Total OneFlip 10000 solucoes: "+solucao2x.getCustototal());
+        System.out.println("Custo Total OneFlip Sem Redundancia: "+solucao2x.getCustototal());
         System.out.println("TEMPO DE PROCESSAMENTO ONEFLIP " + (endTime2x - startTimex2) + " ms");
         System.out.println();
         System.out.println("TEMPO DE PROCESSAMENTO TOTAL " + ((endTime - solucaoinicial.getStartTime())+(endTime2 - startTimex)+(endTime2x - startTimex2)) + " ms");

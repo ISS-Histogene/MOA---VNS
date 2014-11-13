@@ -20,7 +20,7 @@ import moavns.Solucao;
  *
  * @author Gustavo
  */
-public class OneFlip {
+public class TwoFlip {
 
     public long getStartTime() {
         return startTime;
@@ -39,7 +39,7 @@ public class OneFlip {
     private  int qtdeColunas;
     private  float custoTotal;
 
-    public OneFlip(Solucao solucao) {
+    public TwoFlip(Solucao solucao) {
         this.startTime = System.currentTimeMillis();
         this.linhasX = solucao.getLinhasX();
         this.lista_de_colunas_gulosas = solucao.getColunas();
@@ -127,9 +127,11 @@ public class OneFlip {
         }
     }
     
-    public Solucao One_flip_first(Solucao inicio, int x){
+    public Solucao Two_flip(Solucao inicio, int x){
         solucoes.put(inicio.getCustototal(), inicio);
         novassolucoes.put(inicio.getCustototal(), inicio);
+        int limite = 1000000;
+
         for(Coluna col : inicio.getColunas()){
             Solucao testarsolucao = new Solucao(inicio);
             //System.out.println("Atual solucao: "+atual.getLinhasCobertas().size());
@@ -142,23 +144,19 @@ public class OneFlip {
             //System.out.println("Testar solucao 3: "+testarsolucao.getLinhasCobertas().size());
             Coluna novacoluna;
             novacoluna = searchBetterSolution(col, testarsolucao);
-
-
-
             if (novacoluna.getCusto()<col.getCusto()){
-                //System.out.println("Atual: "+ testarsolucao.getCustototal());
-                //System.out.println("Tirar: "+ col.getCusto());
-                //System.out.println("Colocar: "+novacoluna.getCusto());
+
                 float custox = testarsolucao.getCustototal() - col.getCusto() + novacoluna.getCusto();
-                //System.out.println("Custo x: "+ custox);
-                //System.out.println("\n\n");
+
                 testarsolucao.getColunas().remove(col);
                 testarsolucao.getColunas().add(novacoluna);
                 Solucao novasolucao = new Solucao(testarsolucao);
                 novassolucoes.put(custox, novasolucao);
                 solucoes.put(custox, novasolucao);
             }
+
         }
+        
         Float chave = novassolucoes.keySet().iterator().next();
         Solucao solucaox = novassolucoes.get(chave).iterator().next();
         solucaox.setCustototal(chave);
@@ -199,40 +197,5 @@ public class OneFlip {
             return false;
         }
         
-    }
-    
-    
-    public Solucao eliminarRedundancia(Solucao solucao){
-        Multimap<Float, Integer> colunas = TreeMultimap.create();
-        Map<Integer, Coluna> colunasx = new HashMap();
-        for(Coluna coluna : solucao.getColunas()){
-            Float custo = coluna.getCusto();          
-            colunas.put((custo*(-1)), coluna.getNome());
-            colunasx.put(coluna.getNome(), coluna);
-        }
-        Solucao testarsolucao = new Solucao(solucao);
-        for(Float chave : colunas.keySet()){
-            Iterator iterador = colunas.get(chave).iterator();
-            while(iterador.hasNext()){
-                Coluna maiorcoluna = colunasx.get(iterador.next());
-                testarsolucao.getLinhasCobertas().clear();
-                cobrirLinhas(maiorcoluna, testarsolucao);
-                if(testarsolucao.getLinhasCobertas().size()==testarsolucao.getQtdeLinhas()){
-                    System.out.println("Caiu redundancia!");
-                    testarsolucao.getColunas().remove(maiorcoluna);
-                    testarsolucao.setCustototal(custoColunas(testarsolucao));
-                    return eliminarRedundancia(testarsolucao);
-                }
-            }
-        }
-        return solucao;
-    }
-    
-    public int custoColunas(Solucao sol){
-        int custox = 0;
-        for(Coluna custo : sol.getColunas()){
-            custox += custo.getCusto();
-        }
-        return custox;
     }
 }
