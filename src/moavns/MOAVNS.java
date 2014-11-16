@@ -55,7 +55,7 @@ public class MOAVNS {
         int limite = 0;
         Solucao solucaox = new Solucao(solucaosem);
         Solucao solucaox1 = new Solucao(solucaosem);
-        while(limite<=400){
+        while(limite<=80){
             Solucao solucaoaleatoria = SolucaoAleatoria.Vizinhos(solucaox, 0);
             solucoes.add(transformaSolucao(solucaoaleatoria));
             //System.out.println(solucaoaleatoria.getCustototal());
@@ -66,6 +66,7 @@ public class MOAVNS {
                 limite = 0;
             }
             else{
+                solucaox = solucaox1;
                 limite += 1;
             }
         }
