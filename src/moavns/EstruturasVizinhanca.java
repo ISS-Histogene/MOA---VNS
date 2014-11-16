@@ -32,7 +32,7 @@ public class EstruturasVizinhanca {
     private  ArrayList<Integer> linhasCobertas;
     private  Multimap<Float, Solucao> solucoes;
     private  static Comparator comparador = new Comparador();
-    private  static Ordering<Integer> ordenacao = Ordering.natural();
+    private  static Ordering<Float> ordenacao = Ordering.natural();
     private  static Comparator ordenacao1 = ordenacao;
     private  static Ordering<Solucao> ordenacao2 = Ordering.from(comparador);
     private  static Multimap<Float, Solucao> novassolucoes = TreeMultimap.create(ordenacao1,  ordenacao2);

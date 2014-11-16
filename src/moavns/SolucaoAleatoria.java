@@ -111,7 +111,11 @@ public class SolucaoAleatoria {
                         novascolunas.add(inicio.getLinhasX().get(colx));
                         testarsolucao.setColunas(novascolunas);
                         testarsolucao.setCustototal(testarsolucao.getCustototal()-col.getCusto()+inicio.getLinhasX().get(colx).getCusto());
-                        return testarsolucao;
+                        String newstring = MOAVNS.transformaSolucao(testarsolucao);
+                        //System.out.println(newstring);
+                        if(!(MOAVNS.solucoes.contains(newstring))){
+                            return testarsolucao;
+                        }
                     }
                 }
                 

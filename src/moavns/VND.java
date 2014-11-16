@@ -34,6 +34,7 @@ public class VND {
                     //System.out.println("caiu");
                     EstruturasVizinhanca redundancia = new EstruturasVizinhanca(solucao);
                     Solucao solucaox1 = redundancia.RedundanciaBest(solucao);
+                    //System.out.println(solucaox1.getCustototal());
                     if(solucaox1.getCustototal()<solucao.getCustototal()){
                         solucao = solucaox1;
                     }
