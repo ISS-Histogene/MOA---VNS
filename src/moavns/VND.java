@@ -18,62 +18,34 @@ public class VND {
         System.out.println();
     }
     
-    public static Solucao VND(Solucao solucaoxx){
-        int k = 0;
+    public static Solucao VND(Solucao solucaoxx, int k){
         int x = 0;
         Solucao solucao = new Solucao(solucaoxx);
         while(true){
             if(k==0){
+                EstruturasVizinhanca redundancia = new EstruturasVizinhanca(solucao);
+                Solucao solucaox1 = redundancia.RedundanciaBest(solucao);
+                if(solucaox1.getCustototal()<solucaoxx.getQtdeColunas()){
+                    return solucaox1;
+                }
+                k+=1;
+            }
+            if(k==1){
                 EstruturasVizinhanca oneflip = new EstruturasVizinhanca(solucao);
                 Solucao solucao2 = oneflip.One_flip_best(solucao, 0);
                 Solucao solucaox = oneflip.eliminarRedundancia(solucao2);
-                if(solucaox.getCustototal()<solucao.getCustototal()){
-                    solucao = solucaox;
+                if(solucaox.getCustototal()<solucaoxx.getQtdeColunas()){
+                    return solucaox;
                 }
-                else{
-                    //System.out.println("caiu");
-                    EstruturasVizinhanca redundancia = new EstruturasVizinhanca(solucao);
-                    Solucao solucaox1 = redundancia.RedundanciaBest(solucao);
-                    //System.out.println(solucaox1.getCustototal());
-                    if(solucaox1.getCustototal()<solucao.getCustototal()){
-                        solucao = solucaox1;
-                    }
-                    else{
-                        break;
-                    }
-                }
+                k+=1;
             }
-            /*
-            if(k==1){
-                System.out.println("caiu");
-                EstruturasVizinhanca redundancia = new EstruturasVizinhanca(solucao);
-                Solucao solucaox = redundancia.RedundanciaBest(solucao);
-                if(solucaox.getCustototal()<solucao.getCustototal()){
-                    solucao = solucaox;
-                }
-                else{
-                    k+=1;
-                }
-            }
-            
+
             if(k==2){
-                //System.out.println("twoflip");
-                EstruturasVizinhanca twoflip = new EstruturasVizinhanca(solucao);
-                Solucao solucao3 = twoflip.Two_flip_best(solucao);
-                Solucao solucaox = twoflip.eliminarRedundancia(solucao3);
-                if(solucaox.getCustototal()<solucao.getCustototal()){
-                    solucao = solucaox;
-                    k=0;
-                }
-                else{
-                    k+=1;
-                }
+                break;
             }
-                   */
-            else{
-                break;         
-            }
+                
         }
+        //System.out.println("sem melhora");
         return solucao;
     }
 }

@@ -206,6 +206,8 @@ public class EstruturasVizinhanca {
     
     
     public Solucao One_flip_best(Solucao inicio, int x){
+        novassolucoes.clear();
+        novassolucoes.put(inicio.getCustototal(), inicio);
         for(Coluna col : inicio.getColunas()){
             for(Integer colx : inicio.getLinhasX().keySet()){           
                 if(col.getNome()!=inicio.getLinhasX().get(colx).getNome()){
@@ -221,14 +223,14 @@ public class EstruturasVizinhanca {
                             novascolunas.add(inicio.getLinhasX().get(colx));
                             testarsolucao.setColunas(novascolunas);
                             testarsolucao.setCustototal(testarsolucao.getCustototal()-col.getCusto()+inicio.getLinhasX().get(colx).getCusto());
-                            return testarsolucao;
+                            novassolucoes.put(testarsolucao.getCustototal(), testarsolucao);
                         }
                     }
                 }
                 
             }
         }
-        return inicio;
+        return novassolucoes.get(novassolucoes.keySet().iterator().next()).iterator().next();
     }
 
 

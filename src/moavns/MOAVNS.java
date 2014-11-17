@@ -54,28 +54,42 @@ public class MOAVNS {
         System.out.println("Solucao: "+solucaosem.getCustototal());
         int limite = 0;
         Solucao solucaox = new Solucao(solucaosem);
-        Solucao solucaox1 = new Solucao(solucaosem);
-        while(limite<=80){
-            Solucao solucaoaleatoria = SolucaoAleatoria.Vizinhos(solucaox, 0);
+        Solucao melhorsolucao  = new Solucao(solucaosem);
+        int x = 0;
+        while(limite<=20){
+            //System.out.println(limite);
+            Solucao solucaoaleatoria = SolucaoAleatoria.Vizinhos(solucaox, x);
+            //System.out.println("aleatoria: "+solucaoaleatoria.getCustototal());
             solucoes.add(transformaSolucao(solucaoaleatoria));
-            //System.out.println(solucaoaleatoria.getCustototal());
-            Solucao solucaovnd = VND.VND(solucaoaleatoria);
-            System.out.println(solucaovnd.getCustototal());
-            if(solucaovnd.getCustototal()<solucaox.getCustototal()){
+            Solucao solucaovnd = VND.VND(solucaoaleatoria, 0);
+            //System.out.println("vnd: "+solucaovnd.getCustototal());
+            if(solucaovnd.getCustototal()<melhorsolucao.getCustototal()){
+                System.out.println(solucaovnd.getCustototal());
                 solucaox = solucaovnd;
-                limite = 0;
+                melhorsolucao = solucaox;
             }
             else{
-                solucaox = solucaox1;
-                limite += 1;
+                if(x==0){
+                    x=1;
+                }
+                else{
+                    if(x==1){
+                        x=2;
+                    }
+                    else{
+                        x = 0;
+                        solucaox = solucaosem;
+                        limite+=1;
+                    }
+                }
             }
         }
         
-        for(Coluna col : solucaox.getColunas()){
+        for(Coluna col : melhorsolucao.getColunas()){
                     System.out.printf(col.getNome()+" ");
                 }
                 System.out.println();
-                System.out.println("Custo Total: "+solucaox.getCustototal());
+                System.out.println("Custo Total: "+melhorsolucao.getCustototal());
 
        
         
