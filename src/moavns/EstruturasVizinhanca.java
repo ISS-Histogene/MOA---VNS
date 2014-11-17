@@ -13,8 +13,12 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import moavns.Solucao;
 import java.util.Random;
+import static moavns.SolucaoAleatoria.cobreTodasTwoFlip;
+import static moavns.SolucaoAleatoria.cobrirLinhas;
+import static moavns.SolucaoAleatoria.removerLinhas;
 
 
 /**
@@ -136,8 +140,7 @@ public class EstruturasVizinhanca {
     }
     
     public Solucao RedundanciaBest(Solucao inicio){
-        novassolucoes.clear();
-        //System.out.println(inicio.getCustototal());
+        this.solucoes.put(inicio.getCustototal(), inicio);
         for(Integer entrada : linhasX.keySet()){
             Solucao novasolucao = new Solucao(inicio);
             Coluna testar = linhasX.get(entrada);
@@ -145,69 +148,57 @@ public class EstruturasVizinhanca {
             novasolucao.setCustototal(novasolucao.getCustototal()+testar.getCusto());
             Solucao solucaox = eliminarRedundancia(novasolucao);
             //System.out.println(solucaox.getCustototal());
-            novassolucoes.put(solucaox.getCustototal(), solucaox);
-        }
-        return novassolucoes.get(novassolucoes.keySet().iterator().next()).iterator().next();
-    }
-    
-    public Solucao Two_flip_best(Solucao inicio){
-        novassolucoes.clear();
-        int a = 0;
-        while(a<=inicio.getColunas().size()-2){
-            int b = a + 1;
-            while(b<=inicio.getColunas().size()-1){
-                Solucao solucao = twoflipBuscaLocal(inicio, inicio.getColunas().get(a), inicio.getColunas().get(b));
-                if(solucao!=inicio){
-                    novassolucoes.put(solucao.getCustototal(), solucao);
-                }
-                b++;
+            String newsolution = MOAVNS.transformaSolucao(solucaox);
+            if(!MOAVNS.solucoes.contains(newsolution)){
+                this.solucoes.put(solucaox.getCustototal(), solucaox);
             }
-            a++;
         }
-        return eliminarRedundancia(novassolucoes.get(novassolucoes.keySet().iterator().next()).iterator().next());
-        
+        return this.solucoes.get(this.solucoes.keySet().iterator().next()).iterator().next();
     }
     
-    public Solucao twoflipBuscaLocal(Solucao solucao, Coluna coluna1, Coluna coluna2){
-        float custo1 = coluna1.getCusto() + coluna2.getCusto();
-        Coluna[] melhorescolunas = new Coluna[2];
-        Solucao melhorsolucao = new Solucao(solucao);
-        for(Integer entrada1 : linhasX.keySet()){
-            for(Integer entrada2 : linhasX.keySet()){
-                if(entrada1!=entrada2){
-                    if((solucao.getLinhasX().get(entrada1).getCusto() + solucao.getLinhasX().get(entrada2).getCusto()) < (coluna1.getCusto() + coluna2.getCusto())){
-                        Solucao testarsolucao = new Solucao(solucao);
-                        removerLinhas(testarsolucao.getLinhasX().get(entrada1), testarsolucao);
-                        removerLinhas(testarsolucao.getLinhasX().get(entrada2), testarsolucao);
-                        if((solucao.getColunas().contains(testarsolucao.getLinhasX().get(entrada1))) || (solucao.getColunas().contains(testarsolucao.getLinhasX().get(entrada2)))){
-                            continue;
-                        }
-                        else if(cobreTodasTwoFlip(testarsolucao.getLinhasX().get(entrada1), testarsolucao.getLinhasX().get(entrada2), testarsolucao)){
-                            float custoantigo = melhorsolucao.getCustototal();
-                            float custonovo = testarsolucao.getCustototal() -
-                                    coluna1.getCusto() - coluna2.getCusto() + testarsolucao.getLinhasX().get(entrada1).getCusto() + testarsolucao.getLinhasX().get(entrada2).getCusto();
-                            if(custonovo < custoantigo){
-                                testarsolucao.getColunas().remove(coluna1);
-                                testarsolucao.getColunas().remove(coluna2);
-                                testarsolucao.getColunas().add(testarsolucao.getLinhasX().get(entrada1));
-                                testarsolucao.getColunas().add(testarsolucao.getLinhasX().get(entrada2));
-                                melhorsolucao = testarsolucao;
-                                melhorsolucao.setCustototal(custonovo);
-                                System.out.println(custonovo);
-                                return melhorsolucao;
+    public Solucao TwoFlip(Solucao inicio){
+        this.solucoes.put(inicio.getCustototal(), inicio);
+        for(int a = 0; a<=inicio.getColunas().size()-2; a++){
+            for(int b = a+1; b<=inicio.getColunas().size()-1;b++){
+                for(Integer entrada1 : inicio.getLinhasX().keySet()){
+                    for(Integer entrada2 : inicio.getLinhasX().keySet()){
+                        if(!Objects.equals(entrada1, entrada2)){
+                            Solucao newsolution = new Solucao(inicio);
+                            removerLinhas(inicio.getColunas().get(a), newsolution);
+                            removerLinhas(inicio.getColunas().get(b), newsolution);
+                            newsolution.getColunas().remove(inicio.getColunas().get(a));
+                            newsolution.getColunas().remove(inicio.getColunas().get(b));
+                            cobrirLinhas(inicio.getColunas().get(a), newsolution);
+
+                            if(cobreTodasTwoFlip( inicio.getLinhasX().get(entrada1), inicio.getLinhasX().get(entrada2), newsolution)){
+                                newsolution.getColunas().remove(inicio.getColunas().get(a));
+                                newsolution.getColunas().remove(inicio.getColunas().get(b));
+                                newsolution.getColunas().add(inicio.getLinhasX().get(entrada1));
+                                newsolution.getColunas().add(inicio.getLinhasX().get(entrada2));
+                                newsolution.setCustototal(newsolution.getCustototal() - 
+                                                                                        inicio.getColunas().get(a).getCusto() - 
+                                                                                        inicio.getColunas().get(b).getCusto() + 
+                                                                                        inicio.getLinhasX().get(entrada1).getCusto() + 
+                                                                                        inicio.getLinhasX().get(entrada2).getCusto() );
+                                Solucao verdadeira = this.eliminarRedundancia(newsolution);
+                                String newstring = MOAVNS.transformaSolucao(verdadeira);
+                                if(!MOAVNS.solucoes.contains(newstring)){
+                                    this.solucoes.put(verdadeira.getCustototal(), verdadeira);
+                                }
                             }
+
+                            
                         }
                     }
                 }
+                
             }
         }
-        return melhorsolucao;
+        return this.solucoes.get(this.solucoes.keySet().iterator().next()).iterator().next();
     }
     
-    
     public Solucao One_flip_best(Solucao inicio, int x){
-        novassolucoes.clear();
-        novassolucoes.put(inicio.getCustototal(), inicio);
+        this.solucoes.put(inicio.getCustototal(), inicio);
         for(Coluna col : inicio.getColunas()){
             for(Integer colx : inicio.getLinhasX().keySet()){           
                 if(col.getNome()!=inicio.getLinhasX().get(colx).getNome()){
@@ -222,15 +213,19 @@ public class EstruturasVizinhanca {
                             ArrayList novascolunas = testarsolucao.getColunas();
                             novascolunas.add(inicio.getLinhasX().get(colx));
                             testarsolucao.setColunas(novascolunas);
-                            testarsolucao.setCustototal(testarsolucao.getCustototal()-col.getCusto()+inicio.getLinhasX().get(colx).getCusto());
-                            novassolucoes.put(testarsolucao.getCustototal(), testarsolucao);
+                            Solucao verdadeira = this.eliminarRedundancia(testarsolucao);
+                            String newstring = MOAVNS.transformaSolucao(verdadeira);
+                            if(!MOAVNS.solucoes.contains(newstring)){
+                                verdadeira.setCustototal(verdadeira.getCustototal()-col.getCusto()+inicio.getLinhasX().get(colx).getCusto());
+                                this.solucoes.put(verdadeira.getCustototal(), verdadeira);
+                            }
                         }
                     }
                 }
                 
             }
         }
-        return novassolucoes.get(novassolucoes.keySet().iterator().next()).iterator().next();
+        return this.solucoes.get(this.solucoes.keySet().iterator().next()).iterator().next();
     }
 
 
@@ -290,15 +285,16 @@ public class EstruturasVizinhanca {
                 testar.getLinhasCobertas().clear();
                 cobrirLinhas(maiorcoluna, testar);
                 if(testar.getLinhasCobertas().size()==testar.getQtdeLinhas()){
-                    //System.out.println("Caiu redundancia!");
-                    testar.getColunas().remove(maiorcoluna);
-                    //System.out.println("Novo custo: "+solucao.getCustototal());
-                    testar.setCustototal(testar.getCustototal()-maiorcoluna.getCusto());
-                    //System.out.println("Novo custox: "+testarsolucao.getCustototal());
-                    testarsolucao = testar;
+                    String newstring = MOAVNS.transformaSolucao(testar);
+                    if(!MOAVNS.solucoes.contains(newstring)){
+                        testar.getColunas().remove(maiorcoluna);
+                        testar.setCustototal(testar.getCustototal()-maiorcoluna.getCusto());
+                        testarsolucao = testar;
+                    }
                 }
             }
         }
+
         return testarsolucao;
     }
     

@@ -20,22 +20,21 @@ import java.util.Objects;
 public class SolucaoAleatoria {
     public static Solucao Vizinhos(Solucao solucao, int x){
         
-        if(x==0){
+        if(x==1){
             Solucao novasolucao = VizinhoRedundancia(solucao);
             if(novasolucao.equals(solucao)){
                 return novasolucao;
             }
         }
         
-        else if(x==1){
-            //System.out.println("aleatoria oneflip");
+        else if(x==0){
+
             Solucao novasolucao = VizinhoOneFlip(solucao);
             if(novasolucao.equals(solucao)){
                 return novasolucao;
             }
         }
         else if(x==2){
-            //System.out.println("aleatoria twoflip");
             Solucao novasolucao1 = VizinhoTwoFlip(solucao);
             if(!(novasolucao1.equals(solucao))){
                 //System.out.println("Caiu");

@@ -23,29 +23,29 @@ public class VND {
         Solucao solucao = new Solucao(solucaoxx);
         while(true){
             if(k==0){
-                EstruturasVizinhanca redundancia = new EstruturasVizinhanca(solucao);
-                Solucao solucaox1 = redundancia.RedundanciaBest(solucao);
-                if(solucaox1.getCustototal()<solucaoxx.getQtdeColunas()){
-                    return solucaox1;
-                }
-                k+=1;
-            }
-            if(k==1){
                 EstruturasVizinhanca oneflip = new EstruturasVizinhanca(solucao);
                 Solucao solucao2 = oneflip.One_flip_best(solucao, 0);
                 Solucao solucaox = oneflip.eliminarRedundancia(solucao2);
-                if(solucaox.getCustototal()<solucaoxx.getQtdeColunas()){
+                if(solucaox.getCustototal()<solucaoxx.getCustototal()){
                     return solucaox;
                 }
-                k+=1;
+                else{
+                    EstruturasVizinhanca redundancia = new EstruturasVizinhanca(solucao);
+                    Solucao solucaox1 = redundancia.RedundanciaBest(solucao);
+                    Solucao x11 = redundancia.eliminarRedundancia(solucaox1);
+                    if(x11.getCustototal()<solucaoxx.getCustototal()){
+                        return x11;
+                    }
+                    else{
+                        EstruturasVizinhanca redundanciax = new EstruturasVizinhanca(solucao);
+                        Solucao solucaox2 = redundanciax.TwoFlip(solucao);
+                        Solucao x22 = redundanciax.eliminarRedundancia(solucaox2);
+                        if(x22.getCustototal()<solucaoxx.getCustototal()){
+                            return x22;
+                        }
+                    }
+                }
             }
-
-            if(k==2){
-                break;
-            }
-                
         }
-        //System.out.println("sem melhora");
-        return solucao;
     }
 }
