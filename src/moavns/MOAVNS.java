@@ -58,18 +58,20 @@ public class MOAVNS {
         int x = 0;
         while(limite<=20){
             //System.out.println(limite);
-            Solucao solucaoaleatoria = SolucaoAleatoria.Vizinhos(melhorsolucao, x);
+            Solucao solucaoaleatoria = SolucaoAleatoria.Vizinhos(solucaox, x);
             //System.out.println("aleatoria: "+solucaoaleatoria.getCustototal());
             solucoes.add(transformaSolucao(solucaoaleatoria));
             Solucao solucaovnd = VND.VND(solucaoaleatoria, 0);
             solucoes.add(transformaSolucao(solucaovnd));
-            //System.out.println("vnd: "+solucaovnd.getCustototal());
+            //System.out.println(solucaoaleatoria.getCustototal()+" "+solucaovnd.getCustototal()+" "+melhorsolucao.getCustototal());
             if(solucaovnd.getCustototal()<melhorsolucao.getCustototal()){
-                System.out.println(solucaovnd.getCustototal());
+                System.out.println("MelhorSolucao: "+solucaovnd.getCustototal());
                 solucaox = solucaovnd;
                 melhorsolucao = solucaox;
             }
             else{
+                //System.out.println("Caiu else");
+                limite+=1;
                 if(x==0){
                     x=1;
                 }
@@ -79,7 +81,6 @@ public class MOAVNS {
                     }
                     else{
                         x = 0;
-                        limite+=1;
                     }
                 }
             }

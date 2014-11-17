@@ -43,6 +43,7 @@ public class VND {
                         if(x22.getCustototal()<solucaoxx.getCustototal()){
                             return x22;
                         }
+                            
                     }
                 }
             }

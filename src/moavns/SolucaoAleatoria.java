@@ -22,7 +22,7 @@ public class SolucaoAleatoria {
         
         if(x==1){
             Solucao novasolucao = VizinhoRedundancia(solucao);
-            if(novasolucao.equals(solucao)){
+            if(!novasolucao.equals(solucao)){
                 return novasolucao;
             }
         }
@@ -30,7 +30,7 @@ public class SolucaoAleatoria {
         else if(x==0){
 
             Solucao novasolucao = VizinhoOneFlip(solucao);
-            if(novasolucao.equals(solucao)){
+            if(!novasolucao.equals(solucao)){
                 return novasolucao;
             }
         }
